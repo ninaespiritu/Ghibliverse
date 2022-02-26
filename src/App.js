@@ -5,9 +5,26 @@ import { Home } from "./components/HomePage/Home";
 import { Films } from "./components/Films/Films";
 import { useEffect, useState } from "react";
 import { FilmDetails } from "./components/FilmDetails/FilmDetails";
+import { fetchLogin, fetchSignup } from "./utils";
+import { Signup } from "./components/Signup/Signup";
+import { Login } from "./components/Login/Login";
 
 const App = () => {
 	const [films, setFilms] = useState({});
+	const [user, setUser] = useState();
+	const [email, setEmail] = useState();
+	const [username, setUsername] = useState();
+	const [password, setPassword] = useState();
+
+	const handleSignup = async (e) => {
+		e.preventDefault();
+		fetchSignup(setUser, email, username, password);
+	};
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		fetchLogin(setUser, username, password);
+	};
 
 	useEffect(() => {
 		fetchFilms();
@@ -21,21 +38,33 @@ const App = () => {
 	};
 
 	return (
-		<Router>
-			<Navbar />
-
-			{/* <div>
-				{films.map(film => (
-					<h2>{film.title}</h2>
-				))}
-			</div> */}
-
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/films" element={<Films films={films} />} />
-        <Route path="/films/:id" element={<FilmDetails />} />
-			</Routes>
-		</Router>
+		<div>
+			{user ? (
+				<Router>
+					<Navbar user={user} />
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route
+							path="/films"
+							element={<Films films={films} />}
+						/>
+						<Route path="/films/:id" element={<FilmDetails />} />
+					</Routes>
+				</Router>
+			) : (
+				<div>
+					<Signup
+						props={{
+							handleSignup,
+							setEmail,
+							setUsername,
+							setPassword,
+						}}
+					/>
+					<Login props={{ handleLogin, setUsername, setPassword }} />
+				</div>
+			)}
+		</div>
 	);
 };
 
