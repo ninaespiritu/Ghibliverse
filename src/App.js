@@ -42,14 +42,19 @@ const App = () => {
 			{user ? (
 				<Router>
 					<Navbar user={user} />
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route
-							path="/films"
-							element={<Films films={films} />}
-						/>
-						<Route path="/films/:id" element={<FilmDetails />} />
-					</Routes>
+					<div className="app-pages">
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route
+								path="/films"
+								element={<Films films={films} />}
+							/>
+							<Route
+								path="/films/:id"
+								element={<FilmDetails />}
+							/>
+						</Routes>
+					</div>
 				</Router>
 			) : (
 				<div>
